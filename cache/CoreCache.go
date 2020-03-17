@@ -4,7 +4,7 @@ import (
 	"container/list"
 )
 
-type Cache struct {
+type CoreCache struct {
 	//字典表，用于映射key和链表的element
 	dict map[string]*list.Element
 	//双向链表,链表头部是最长时间没有使用的entry,尾部是最近使用的
@@ -24,19 +24,19 @@ type Entry struct {
 	value Value
 }
 
-func (cache *Cache) Len() int {
+func (cache *CoreCache) Len() int {
 	return cache.dll.Len()
 }
 
-func Init(maxSize int64) *Cache {
-	return &Cache{
+func Init(maxSize int64) *CoreCache {
+	return &CoreCache{
 		maxSize: maxSize,
 		dll:     list.New(),
 		dict:    make(map[string]*list.Element),
 	}
 }
 
-func (cache *Cache) Put(key string, value Value) {
+func (cache *CoreCache) Put(key string, value Value) {
 	if element, ok := cache.dict[key]; ok {
 		cache.dll.MoveToFront(element)
 		entry := element.Value.(*Entry)
@@ -53,7 +53,7 @@ func (cache *Cache) Put(key string, value Value) {
 	}
 }
 
-func (cache *Cache) Get(key string) (value Value, ok bool) {
+func (cache *CoreCache) Get(key string) (value Value, ok bool) {
 	if element, ok := cache.dict[key]; ok {
 		cache.dll.MoveToBack(element)
 		entry := element.Value.(*Entry)
@@ -62,7 +62,7 @@ func (cache *Cache) Get(key string) (value Value, ok bool) {
 	return
 }
 
-func (cache *Cache) DeleteOldest() {
+func (cache *CoreCache) DeleteOldest() {
 	element := cache.dll.Back()
 	if element != nil {
 		cache.dll.Remove(element)
