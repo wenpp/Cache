@@ -1,7 +1,6 @@
-package test
+package cache
 
 import (
-	"Cache/cache"
 	"testing"
 )
 
@@ -12,7 +11,7 @@ func (s String) Len() int {
 }
 
 func TestPut(t *testing.T) {
-	cache := cache.Init(int64(0))
+	cache := Init(int64(0))
 	cache.Put("key", String("Hello"))
 
 	expect := 1
@@ -23,7 +22,7 @@ func TestPut(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	cache := cache.Init(int64(0))
+	cache := Init(int64(0))
 	cache.Put("key1", String("Hello"))
 	cache.Put("key2", String("morning"))
 
@@ -49,7 +48,7 @@ func TestDeleteOldest(t *testing.T) {
 	value3 := String("value=3")
 
 	maxSizeCorrect := int64(len(key1) + len(key2) + value1.Len() + value2.Len())
-	cache := cache.Init(maxSizeCorrect)
+	cache := Init(maxSizeCorrect)
 
 	cache.Put(key1, value1)
 	cache.Put(key2, value2)
