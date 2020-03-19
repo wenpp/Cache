@@ -4,14 +4,20 @@ import (
 	"Cache/cache"
 	"Cache/db"
 	"fmt"
+	"log"
 	"net/http"
 )
 
 func main() {
-	cacheQueryServer := "localhost:8000"
+	cacheQueryServer := "127.0.0.1:7000"
 	cacheSpace := intiCacheNameSpace()
 
 	nodeList := []string{"localhost:8001", "localhost:8002", "localhost:8003"}
+
+	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Write([]byte("hello"))
+	})
 
 	http.Handle("/cache", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
@@ -25,8 +31,9 @@ func main() {
 			w.Write(value.CacheSlice())
 		}))
 
-	go LaunchCacheNode(nodeList, cacheSpace)
+	LaunchCacheNode(nodeList, cacheSpace)
 
+	log.Println("Query Server is launched successul! At address:", cacheQueryServer)
 	http.ListenAndServe(cacheQueryServer, nil)
 
 }
@@ -43,6 +50,6 @@ func intiCacheNameSpace() *cache.CacheNameSpace {
 
 func LaunchCacheNode(nodeList []string, cacheSpace *cache.CacheNameSpace) {
 	for _, node := range nodeList {
-		cache.StartCacheNode(node, nodeList, cacheSpace)
+		go cache.StartCacheNode(node, nodeList, cacheSpace)
 	}
 }

@@ -3,6 +3,7 @@ package cache
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	url2 "net/url"
 	"strings"
@@ -78,7 +79,8 @@ func StartCacheNode(localAddress string, nodesAddress []string, cacheSpace *Cach
 	cacheNode := InitCacheNodes(localAddress)
 	cacheNode.UpdateNodePool(nodesAddress...)
 	cacheSpace.RegisterCacheNode(cacheNode)
-
+	log.Println("CacheNode:" + localAddress + " is running")
+	http.ListenAndServe(localAddress, nil)
 }
 
 func (cacheNode *CacheNode) HandlerHttpRequest(w http.ResponseWriter, r *http.Request) {
