@@ -34,7 +34,7 @@ func (cache *Cache) Len() int {
 	return cache.dll.Len()
 }
 
-func Init(maxSize int64) *Cache {
+func InitCache(maxSize int64) *Cache {
 	return &Cache{
 		maxSize: maxSize,
 		dll:     list.New(),
@@ -46,7 +46,7 @@ func (cache *Cache) Put(key string, value Value) {
 	mu.Lock()
 	defer mu.Unlock()
 	if cache == nil {
-		cache = Init(cache.maxSize)
+		cache = InitCache(cache.maxSize)
 	}
 
 	if element, ok := cache.dict[key]; ok {
