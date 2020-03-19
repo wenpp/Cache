@@ -13,7 +13,7 @@ type HashRing struct {
 	replicas       int            //虚拟节点数量
 }
 
-func Init(replicas int) *HashRing {
+func InitHashRing(replicas int) *HashRing {
 	ch := &HashRing{
 		virtualNodeMap: make(map[int]string),
 		replicas:       replicas,
@@ -33,7 +33,7 @@ func (chash *HashRing) Add(keys ...string) {
 	sort.Ints(chash.keys)
 }
 
-func (chash *HashRing) Get(key string) string {
+func (chash *HashRing) GetHashKey(key string) string {
 	if len(chash.keys) == 0 {
 		return ""
 	}

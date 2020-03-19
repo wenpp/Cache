@@ -9,8 +9,8 @@ import (
 type CacheNameSpace struct {
 	name       string     //缓存控件名称
 	cache      *Cache     //当前缓存控件下的核心缓存
-	nodes      NodePicker //在当前的缓存控件中保存所有的缓存节点
 	dataGetter DataGetter //当从缓存中无法获取值的时候，使用调用传入的Getter获取值
+	nodes      NodePicker //在当前的缓存空间中保存经过hash计算的节点
 }
 
 type DataGetter interface {
